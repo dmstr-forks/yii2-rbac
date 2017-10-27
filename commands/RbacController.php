@@ -28,11 +28,12 @@ class RbacController extends Controller
         $manager = \Yii::$app->authManager;
         if (in_array($user->id, $manager->getUserIdsByRole($roleName))) {
             $this->stderr('Role is already assigned to this user'.PHP_EOL);
+            $this->stdout(PHP_EOL.PHP_EOL.'Aborted.'.PHP_EOL);
         } else {
             $role = $manager->getRole($roleName);
             $manager->assign($role, $user->id);
             $this->stdout('Role has been assigned');
-            $this->stdout("\n\nDone.\n");
+            $this->stdout(PHP_EOL.PHP_EOL.'Done.'.PHP_EOL);
         }
     }
 
@@ -50,6 +51,6 @@ class RbacController extends Controller
         $role = $manager->getRole($roleName);
         $manager->revoke($role, $user->id);
         $this->stdout('Role has been revoked');
-        $this->stdout("\n\nDone.\n");
+        $this->stdout(PHP_EOL.PHP_EOL.'Done.'.PHP_EOL);
     }
 }
