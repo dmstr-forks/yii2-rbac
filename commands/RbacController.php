@@ -26,10 +26,14 @@ class RbacController extends Controller
         $userModel = new User();
         $user = $userModel->finder->findUserByUsername($userName);
         $manager = \Yii::$app->authManager;
-        $role = $manager->getRole($roleName);
-        $manager->assign($role, $user->id);
-        $this->stdout('Role has been assigned');
-        $this->stdout("\n\nDone.\n");
+        if (in_array($user->id, $manager->getUserIdsByRole($roleName))) {
+            $this->stderr('Role is already assigned to this user'.PHP_EOL);
+        } else {
+            $role = $manager->getRole($roleName);
+            $manager->assign($role, $user->id);
+            $this->stdout('Role has been assigned');
+            $this->stdout("\n\nDone.\n");
+        }
     }
 
     /**
